@@ -1,0 +1,28 @@
+# Solar AI Eye - Smart Solar Monitoring with ESP32
+SIH Viswakarma 2025 | Team Vijayawada | One Repo = Code + Video + Circuit
+
+## Hardware
+- ESP32 DevKit V1
+- DHT22 -> GPIO 4
+- Voltage Sensor (25V) -> GPIO 34
+- ACS712 20A -> GPIO 35 (Powered with 3.3V - Safe, No Resistor)
+- 16x2 I2C LCD -> SDA 21, SCL 22
+- Solar Panel 6V
+
+## Wiring (Safe Mode)
+DHT22 VCC->3.3V, GND->GND, DATA->4
+Voltage Sensor VCC->5V, GND->GND, S->34
+ACS712 VCC->3.3V, GND->GND, OUT->35
+LCD VCC->5V, GND->GND, SDA->21, SCL->22
+
+## Fix for White Blocks (Your Video Issue)
+1. Breadboard top-bottom red rails connect with wire, blue rails connect with wire
+2. Adjust blue pot behind LCD
+3. Change 0x3F to 0x27 if still blocks
+
+## How to Run
+Baud 115200, Libraries: DHT, Adafruit Unified, LiquidCrystal_I2C
+
+## Reference
+https://github.com/MicrocontrollersAndMore/ESP32_Solar_Panel_Monitoring
+https://github.com/VoltaicSystems/ESP32-Solar-Monitor
