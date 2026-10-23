@@ -1,0 +1,46 @@
+#include <DHT.h>
+#include <Wire.h>
+#include <LiquidCrystal_I2C.h>
+
+#define DHTPIN 4
+#define DHTTYPE DHT22
+#define VOLTAGE_PIN 34
+#define CURRENT_PIN 35
+
+DHT dht(DHTPIN, DHTTYPE);
+LiquidCrystal_I2C lcd(0x3F, 16, 2); // White blocks vaste 0x27 ga marchu
+
+void setup() {
+  Serial.begin(115200);
+  Wire.begin(21, 22); // SDA=21, SCL=22
+  lcd.init();
+  lcd.backlight();
+  lcd.setCursor(0,0);
+  lcd.print("Solar AI Eye");
+  lcd.setCursor(0,1);
+  lcd.print("Vijayawada Ready");
+  dht.begin();
+  delay(2000);
+  lcd.clear();
+}
+
+void loop() {
+  float t = dht.readTemperature();
+  float h = dht.readHumidity();
+  int rawV = analogRead(VOLTAGE_PIN);
+  int rawC = analogRead(CURRENT_PIN);
+  float v = rawV * 3.3 / 4095.0 * 5.0;
+  float cVolt = rawC * 3.3 / 4095.0;
+  float c = (cVolt - 1.65) / 0.10; // 3.3V safe mode, no resistor
+
+  Serial.print("T:"); Serial.print(t);
+  Serial.print(" H:"); Serial.print(h);
+  Serial.print(" V:"); Serial.print(v,1);
+  Serial.print(" I:"); Serial.println(c,1);
+
+  lcd.setCursor(0,0);
+  lcd.print("T:"); lcd.print(t,1); lcd.print("C H:"); lcd.print(h,0); lcd.print("% ");
+  lcd.setCursor(0,1);
+  lcd.print("V:"); lcd.print(v,1); lcd.print(" I:"); lcd.print(c,1); lcd.print("A  ");
+  delay(2000);
+}
